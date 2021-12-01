@@ -20,9 +20,14 @@
     <button id="selbtn">Select Image</button>
     <button id="upbtn">Upload Image</button>
     <button id="downbtn">Retrieve Image</button>
-
+    <button id ="display">Fetch Posts</button>
+    
+   <div id = "post">
+    
+   </div>
 
     <script type="module">
+        
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.5.0/firebase-app.js";
         import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.5.0/firebase-analytics.js";
         
@@ -47,7 +52,31 @@
         const  realdb= getDatabase();
 
 
-        // variable references
+       //Fetch Posts from database
+        var btn = document.getElementById("display");
+        btn.onclick = function()
+        {
+            var html =""
+            const dbRef = ref(getDatabase());
+get(child(dbRef, `ImagesLinks/`)).then((snapshot) => {
+  if (snapshot.exists()) {
+    console.log(snapshot.val());
+    snapshot.forEach(data =>{
+        html = `<img src ="${data.val().ImgUrl}" id = "display"  />`
+        document.getElementById("post").innerHTML += html;
+        
+    })
+  } else {
+    console.log("No data available");
+  }
+}).catch((error) => {
+  console.error(error);
+});
+
+
+}
+
+  // variable references
         var files=[]
         var reader = new FileReader();
         var namebox = document.getElementById('namebox');
